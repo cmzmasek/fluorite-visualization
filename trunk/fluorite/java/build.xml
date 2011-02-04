@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="FLUORITE" basedir="." default="all">
+
+    <property name="src.dir" value="src"/>
+    <property name="classes.dir" value="classes"/>
+	<property name="jars.dir" value="lib"/>
+	<property name="gnupdfjar" value="${jars.dir}/gnujpdf.jar"/>
+    <property name="fluorite_jar" value="fluorite.jar"/>
+
+    <target name="clean" description="Delete all generated files">
+        <delete dir="${classes.dir}" failonerror="false"/>
+        <delete file="${fluorite_jar}"/>
+    </target>
+
+    <target name="compile" description="Compiles the Task" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" optimize="on" verbose="false" classpath="${gnupdfjar}"/>
+    </target>
+
+    <target name="jar" description="JARs the classes files" depends="compile">
+    	<unjar src="${gnupdfjar}" dest="${classes.dir}">
+            <patternset>
+                 <include name="**/*.class"/>
+                 <exclude name="**/*Test*.class"/>
+            </patternset>
+    	</unjar>	
+    	<jar destfile="${fluorite_jar}" basedir="${classes.dir}" excludes="**/Test.class" duplicate="fail" index="true">
+            <manifest>
+                <attribute name="Main-Class" value="org.fluorite.x.x"/>
+            </manifest>
+    	</jar>		
+    </target>
+    
+    <target name="all" description="" depends="jar">
+    </target>
+
+</project>
